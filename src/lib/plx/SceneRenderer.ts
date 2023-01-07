@@ -1,9 +1,13 @@
 import * as THREE from 'three';
 
+import { Time } from '../../components/Time';
+
 export class SceneRenderer {
   scene: THREE.Scene = new THREE.Scene();
   camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera();
-  renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
+  static renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({
+    antialias: true,
+  });
 
   renderTarget: HTMLElement;
 
@@ -15,14 +19,24 @@ export class SceneRenderer {
     }
     this.mounted = true;
     this.renderTarget = divElement;
-    this.renderTarget.appendChild(this.renderer.domElement);
+    this.renderTarget.appendChild(SceneRenderer.renderer.domElement);
 
     new ResizeObserver(this.onResize.bind(this)).observe(this.renderTarget);
 
     this.initRenderer();
     this.initCamera();
     this.addAxesGizmo();
+    this.addGridGizmo();
     this.raf();
+  }
+
+  onDestroy() {
+    if (!this.mounted) {
+      return;
+    }
+    this.mounted = false;
+    this.renderTarget.removeChild(SceneRenderer.renderer.domElement);
+    cancelAnimationFrame(this.rafID);
   }
 
   initCamera() {
@@ -38,21 +52,62 @@ export class SceneRenderer {
   }
 
   initRenderer() {
-    this.renderer.setClearColor(new THREE.Color("SkyBlue"), 1);
-    this.renderer.setPixelRatio(window.devicePixelRatio);
-    this.renderer.setSize(
+    SceneRenderer.renderer.setClearColor(0, 0);
+    SceneRenderer.renderer.setPixelRatio(window.devicePixelRatio);
+    SceneRenderer.renderer.setSize(
       this.renderTarget.clientWidth,
       this.renderTarget.clientHeight
     );
   }
 
   addAxesGizmo() {
-    const axesHelper = new THREE.AxesHelper(5);
-    this.scene.add(axesHelper);
+    const xAxisLine = new THREE.Line3(
+      new THREE.Vector3(-10, 0, 0),
+      new THREE.Vector3(10, 0, 0)
+    );
+
+    const yaxisLine = new THREE.Line3(
+      new THREE.Vector3(0, -10, 0),
+      new THREE.Vector3(0, 10, 0)
+    );
+
+    const zaxisLine = new THREE.Line3(
+      new THREE.Vector3(0, 0, -10),
+      new THREE.Vector3(0, 0, 10)
+    );
+
+    const xAxisGeometry = new THREE.BufferGeometry().setFromPoints([
+      xAxisLine.start,
+      xAxisLine.end,
+    ]);
+    const yAxisGeometry = new THREE.BufferGeometry().setFromPoints([
+      yaxisLine.start,
+      yaxisLine.end,
+    ]);
+    const zAxisGeometry = new THREE.BufferGeometry().setFromPoints([
+      zaxisLine.start,
+      zaxisLine.end,
+    ]);
+
+    const xAxisMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
+    const yAxisMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+    const zAxisMaterial = new THREE.LineBasicMaterial({ color: 0x0000ff });
+
+    const xAxis = new THREE.Line(xAxisGeometry, xAxisMaterial);
+    const yAxis = new THREE.Line(yAxisGeometry, yAxisMaterial);
+    const zAxis = new THREE.Line(zAxisGeometry, zAxisMaterial);
+
+    this.scene.add(xAxis);
+    this.scene.add(yAxis);
+    this.scene.add(zAxis);
+  }
+  addGridGizmo() {
+    const gridHelper = new THREE.GridHelper(10, 10);
+    this.scene.add(gridHelper);
   }
 
   onResize(event: UIEvent) {
-    this.renderer.setSize(
+    SceneRenderer.renderer.setSize(
       this.renderTarget.clientWidth,
       this.renderTarget.clientHeight
     );
@@ -66,17 +121,28 @@ export class SceneRenderer {
   }
 
   render() {
-    if (!this.renderer) {
+    if (!SceneRenderer.renderer) {
       return;
     }
     if (!this.scene) {
       return;
     }
-    this.renderer.render(this.scene, this.camera);
+    SceneRenderer.renderer.render(this.scene, this.camera);
   }
 
+  rafID: number = 0;
   raf() {
-    requestAnimationFrame(this.raf.bind(this));
+    this.rafID = requestAnimationFrame(this.raf.bind(this));
+    const now = performance.now();
+    Time.update(now);
+
+    // rotate camera around the origin
+    this.camera.position.applyAxisAngle(
+      new THREE.Vector3(0, 1, 0),
+      Time.deltaTime * 0.2
+    );
+    this.camera.lookAt(0, 0, 0);
+
     this.render();
   }
 }

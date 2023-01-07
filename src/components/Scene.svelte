@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { SceneRenderer } from "../lib/plx/SceneRenderer";
 
   let divElement: HTMLElement;
@@ -9,9 +9,19 @@
   onMount(() => {
     scene.onMount(divElement);
   });
+
+  onDestroy(() => {
+    scene.onDestroy();
+  });
 </script>
 
-<div bind:this={divElement} id="scene-view" />
+<div
+  bind:this={divElement}
+  id="scene-view"
+  on:contextmenu={(e) => {
+    e.preventDefault();
+  }}
+/>
 
 <style>
   #scene-view {
