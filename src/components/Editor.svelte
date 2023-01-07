@@ -9,6 +9,8 @@
 </div>
 
 <style>
+  @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
   #editor {
     position: absolute;
     top: 0;
@@ -18,6 +20,7 @@
     background-color: #222;
     color: rgb(255, 255, 255);
     overflow: hidden;
+    font-family: "Roboto", sans-serif;
   }
 
   #hierarchy {
@@ -26,7 +29,7 @@
     left: 0;
     width: 200px;
     height: 100%;
-    background-color: #111;
+    background-color: #222;
   }
 
   #scene {

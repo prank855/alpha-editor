@@ -105,6 +105,11 @@ export class SceneRenderer {
     const gridHelper = new THREE.GridHelper(10, 10);
     gridHelper.position.y -= 0.001;
     this.scene.add(gridHelper);
+
+    const largeGridHelper = new THREE.GridHelper(100, 20);
+    largeGridHelper.position.y -= 0.001;
+
+    this.scene.add(largeGridHelper);
   }
 
   onResize(event: UIEvent) {

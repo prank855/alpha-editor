@@ -4,11 +4,17 @@
   import type { IGameNode } from "./IGameNode";
 
   let addGameNode = () => {
-    console.log("Add GameNode");
-    gameNodes = [...gameNodes, { name: "GameNode", children: [] }];
+    gameNodes = [
+      ...gameNodes,
+      { name: "GameNode", children: [], parent: null },
+    ];
   };
 
   let gameNodes: IGameNode[] = [];
+
+  let remove = (node: IGameNode) => {
+    gameNodes = gameNodes.filter((n) => n !== node);
+  };
 
   let ctxMenu: ContextMenu;
 </script>
@@ -18,7 +24,7 @@
   <center>Hierarchy</center>
   <hr />
   {#each gameNodes as gameNode}
-    <GameNode {gameNode} />
+    <GameNode {gameNode} parentRemove={remove} />
   {/each}
 </div>
 
