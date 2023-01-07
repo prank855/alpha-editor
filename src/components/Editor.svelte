@@ -15,7 +15,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #333;
+    background-color: #222;
     color: rgb(255, 255, 255);
     overflow: hidden;
   }
@@ -26,7 +26,7 @@
     left: 0;
     width: 200px;
     height: 100%;
-    background-color: #222;
+    background-color: #111;
   }
 
   #scene {

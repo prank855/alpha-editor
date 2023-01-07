@@ -103,6 +103,7 @@ export class SceneRenderer {
   }
   addGridGizmo() {
     const gridHelper = new THREE.GridHelper(10, 10);
+    gridHelper.position.y -= 0.001;
     this.scene.add(gridHelper);
   }
 
