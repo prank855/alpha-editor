@@ -66,12 +66,12 @@ export class SceneRenderer {
       new THREE.Vector3(10, 0, 0)
     );
 
-    const yaxisLine = new THREE.Line3(
+    const yAxisLine = new THREE.Line3(
       new THREE.Vector3(0, -10, 0),
       new THREE.Vector3(0, 10, 0)
     );
 
-    const zaxisLine = new THREE.Line3(
+    const zAxisLine = new THREE.Line3(
       new THREE.Vector3(0, 0, -10),
       new THREE.Vector3(0, 0, 10)
     );
@@ -81,12 +81,12 @@ export class SceneRenderer {
       xAxisLine.end,
     ]);
     const yAxisGeometry = new THREE.BufferGeometry().setFromPoints([
-      yaxisLine.start,
-      yaxisLine.end,
+      yAxisLine.start,
+      yAxisLine.end,
     ]);
     const zAxisGeometry = new THREE.BufferGeometry().setFromPoints([
-      zaxisLine.start,
-      zaxisLine.end,
+      zAxisLine.start,
+      zAxisLine.end,
     ]);
 
     const xAxisMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
