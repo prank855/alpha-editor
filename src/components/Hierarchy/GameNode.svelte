@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
   import ContextMenu from "../ContextMenu.svelte";
   import type { IGameNode } from "../IGameNode";
 
@@ -14,19 +15,22 @@
     childrenVisible = true;
   };
 
-  let remove = (node: IGameNode) => {
+  const dispatch = createEventDispatcher();
+  let deleteMe = () => {
+    dispatch("deleteMe", gameNode);
+  };
+
+  let removeChild = (node: IGameNode) => {
     gameNode.children = gameNode.children.filter((n) => n !== node);
   };
 
   let ctxMenu: ContextMenu;
 
-  let parentRemove;
-
   let inputField: HTMLInputElement;
 
   let childrenVisible = false;
 
-  export { gameNode, parentRemove };
+  export { gameNode };
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -69,7 +73,12 @@
     {#if gameNodeChildren.length > 0}
       <div>
         {#each gameNodeChildren as child}
-          <svelte:self gameNode={child} parentRemove={remove} />
+          <svelte:self
+            gameNode={child}
+            on:deleteMe={(c) => {
+              removeChild(c.detail);
+            }}
+          />
         {/each}
       </div>
     {/if}
@@ -86,9 +95,7 @@
       },
       {
         title: "Remove",
-        action: () => {
-          parentRemove(gameNode);
-        },
+        action: deleteMe,
       },
     ],
   }}

@@ -12,7 +12,7 @@
 
   let gameNodes: IGameNode[] = [];
 
-  let remove = (node: IGameNode) => {
+  let removeChild = (node: IGameNode) => {
     gameNodes = gameNodes.filter((n) => n !== node);
   };
 
@@ -24,7 +24,12 @@
   <center>Hierarchy</center>
   <hr />
   {#each gameNodes as gameNode}
-    <GameNode {gameNode} parentRemove={remove} />
+    <GameNode
+      {gameNode}
+      on:deleteMe={(c) => {
+        removeChild(c.detail);
+      }}
+    />
   {/each}
 </div>
 
