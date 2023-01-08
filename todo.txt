@@ -1,0 +1,6 @@
+add + button to hierarchy to add new game node
+select game node and show transform gizmo in viewport
+make transform gizmo interactable 
+inspector panel
+ - show transform
+ - components
