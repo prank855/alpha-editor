@@ -4,14 +4,14 @@
 
   let divElement: HTMLElement;
 
-  let scene: SceneRenderer = new SceneRenderer();
+  let sceneRenderer: SceneRenderer = new SceneRenderer();
 
   onMount(() => {
-    scene.onMount(divElement);
+    sceneRenderer.onMount(divElement);
   });
 
   onDestroy(() => {
-    scene.onDestroy();
+    sceneRenderer.onDestroy();
   });
 </script>
 

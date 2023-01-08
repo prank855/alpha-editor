@@ -53,8 +53,12 @@ export class SceneRenderer {
   }
 
   initRenderer() {
+    // transparent background
     SceneRenderer.renderer.setClearColor(0, 0);
-    SceneRenderer.renderer.setPixelRatio(window.devicePixelRatio);
+
+    // Super sampling
+    SceneRenderer.renderer.setPixelRatio(2);
+
     SceneRenderer.renderer.setSize(
       this.renderTarget.clientWidth,
       this.renderTarget.clientHeight
