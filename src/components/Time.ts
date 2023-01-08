@@ -1,6 +1,6 @@
 export class Time {
   static deltaTime: number = 0;
-  private static lastTime: number = 0;
+  private static lastTime: DOMHighResTimeStamp = 0;
 
   static update(now: DOMHighResTimeStamp) {
     if (this.lastTime === 0) {

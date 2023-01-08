@@ -6,7 +6,7 @@
   let addGameNode = () => {
     gameNodes = [
       ...gameNodes,
-      { name: "GameNode", children: [], parent: null },
+      { name: "Empty GameNode", children: [], parent: null },
     ];
   };
 
@@ -23,14 +23,16 @@
 <div id="hierarchy" on:contextmenu={ctxMenu.open}>
   <center>Hierarchy</center>
   <hr />
-  {#each gameNodes as gameNode}
-    <GameNode
-      {gameNode}
-      on:deleteMe={(c) => {
-        removeChild(c.detail);
-      }}
-    />
-  {/each}
+  <div id="gameNodes">
+    {#each gameNodes as gameNode}
+      <GameNode
+        {gameNode}
+        on:deleteMe={(c) => {
+          removeChild(c.detail);
+        }}
+      />
+    {/each}
+  </div>
 </div>
 
 <ContextMenu
@@ -49,5 +51,9 @@
 <style>
   #hierarchy {
     height: 100%;
+  }
+  #gameNodes {
+    height: 100%;
+    overflow-y: auto;
   }
 </style>

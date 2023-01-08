@@ -10,7 +10,7 @@
   let addChild = () => {
     gameNode.children = [
       ...gameNode.children,
-      { name: "Child", children: [], parent: gameNode },
+      { name: "Empty Child", children: [], parent: gameNode },
     ];
     childrenVisible = true;
   };
@@ -109,6 +109,7 @@
     text-align: center;
     text-justify: distribute;
     background-color: #444;
+    margin-bottom: 0.25em;
   }
   .children {
     margin-left: 10px;

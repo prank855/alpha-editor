@@ -27,7 +27,7 @@ export class SceneRenderer {
     this.initCamera();
     this.addAxesGizmo();
     this.addGridGizmo();
-    this.raf();
+    this.startRendering();
   }
 
   onDestroy() {
@@ -36,7 +36,8 @@ export class SceneRenderer {
     }
     this.mounted = false;
     this.renderTarget.removeChild(SceneRenderer.renderer.domElement);
-    cancelAnimationFrame(this.rafID);
+    SceneRenderer.renderer.dispose();
+    this.stopRendering();
   }
 
   initCamera() {
@@ -136,10 +137,16 @@ export class SceneRenderer {
     SceneRenderer.renderer.render(this.scene, this.camera);
   }
 
-  rafID: number = 0;
-  raf() {
-    this.rafID = requestAnimationFrame(this.raf.bind(this));
-    const now = performance.now();
+  startRendering() {
+    SceneRenderer.renderer.setAnimationLoop(this.loop.bind(this));
+  }
+
+  stopRendering() {
+    SceneRenderer.renderer.setAnimationLoop(null);
+  }
+
+  loop() {
+    const now: DOMHighResTimeStamp = performance.now();
     Time.update(now);
 
     // rotate camera around the origin
